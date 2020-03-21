@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # https://github.com/kosyed/script-repository/firefox-on-linux
-# Script installs offical stand-alone version of Firefox, works well on Debian
+# Script installs offical stand-alone version of Firefox on linux, works well in Debian
 # Resource: https://www.mozilla.org/firefox/all/
 
 # Required:
