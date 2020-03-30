@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# https://github.com/kosyed/script-repository/cloudflare-ddns
+# https://github.com/kosyed/script-repository#cloudflare-ddns
 # Script updates selected DNS Record Name to Client WAN IP, works well as a cron job "0 0 * * * /home/pi/cloudflare-ddns.sh"
 # Reference: https://api.cloudflare.com/#dns-records-for-a-zone-properties
 # Reference for IP retrieval: https://community.cloudflare.com/t/have-problems-with-1-1-1-1-read-me-first/15902
