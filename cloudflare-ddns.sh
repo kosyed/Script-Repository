@@ -2,8 +2,8 @@
 
 # https://github.com/kosyed/script-repository/cloudflare-ddns
 # Script updates selected DNS Record Name to Client WAN IP, works well as a cron job "0 0 * * * /home/pi/cloudflare-ddns.sh"
-# Resource: https://1.1.1.1/help
-# Resource: https://api.cloudflare.com/#dns-records-for-a-zone-properties
+# Reference: https://api.cloudflare.com/#dns-records-for-a-zone-properties
+# Reference for IP retrieval: https://community.cloudflare.com/t/have-problems-with-1-1-1-1-read-me-first/15902
 
 # Required: TOKEN or EMAIL + GLOBALKEY
 TOKEN=""                                         # My Profile > API Tokens > API Tokens > Create Token
@@ -39,7 +39,7 @@ if [ "$TYPE" == "A" ]; then
 	fi
 fi
 
-MYIP="$(dig @$IPADDRESS ch txt whoami.cloudflare +short | tr -d '"')"
+MYIP="$(dig @$IPADDRESS whoami.cloudflare CH TXT +short | tr -d '"')"
 
 if [ -z "$MYIP" ] || [[ "$MYIP" == *"timed out"* ]]; then
 	echo "Client WAN $TYPE Retrieval Error"
