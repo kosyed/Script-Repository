@@ -2,8 +2,8 @@
 
 # https://github.com/kosyed/script-repository/firefox-on-linux
 # Script installs offical stand-alone version of Mozilla Firefox on linux, works well on Debian based distros
-# Resource: https://www.mozilla.org/firefox/all/
-# Resource: https://wiki.debian.org/Firefox
+# Reference: https://wiki.debian.org/Firefox
+# Reference for downloading: https://www.mozilla.org/firefox/all/
 
 # Required:
 PRODUCT="firefox-latest-ssl"                     # "firefox-esr-latest-ssl" for ESR
