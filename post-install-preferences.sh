@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# https://github.com/kosyed/script-repository/post-install-preferences
+# https://github.com/kosyed/script-repository#post-install-preferences
 # Script for a range of preferences, maybe run as "sudo post-install-preferences.sh && post-install-preferences.sh"
 
 # Reference for Grub: https://www.gnu.org/software/grub/manual/grub/grub.html#Simple-configuration
