@@ -8,14 +8,31 @@ RUN_GRUB="no"                                    # "yes" to run
 GRUB_DEFAULT=0
 GRUB_TIMEOUT=1
 
+# Reference for Apt-Get: https://manpages.debian.org/buster/apt/apt-get.8.en.html
+RUN_APTGET="no"                                  # "yes" to run
+APTGET_PREF=(
+filezilla
+ghex
+gimp
+#hugo
+inkscape
+luckybackup
+meld
+numlockx
+sqlitebrowser
+transmission
+#virt-manager
+whois
+)
+
 # Reference for Firefox: http://kb.mozillazine.org/User.js_file
 RUN_FIREFOX="no"                                 # "yes" to run
 FIREFOX_DIR=""                                   # ~/.mozilla/firefox/[FIREFOX_DIR]/
-FIREFOX_PREF="
-user_pref(\"browser.backspace_action\", 0);
-user_pref(\"browser.urlbar.doubleClickSelectsAll\", false);
-user_pref(\"security.certerrors.permanentOverride\", false);
-"
+FIREFOX_PREF='
+user_pref("browser.backspace_action", 0);
+user_pref("browser.urlbar.doubleClickSelectsAll", false);
+user_pref("security.certerrors.permanentOverride", false);
+'
 
 ######## SCRIPT ########
 
@@ -28,6 +45,19 @@ if [ "$RUN_GRUB" == "yes" ]; then
 		update-grub 2>/dev/null
 		else
 		echo "Grub update requires root"
+	fi
+fi
+
+# Apt-Get
+if [ "$RUN_APTGET" == "yes" ]; then
+	if [[ $EUID -eq 0 ]]; then
+		echo "Running Apt-Get"
+		apt-get update
+		for i in "${APTGET_PREF[@]}"; do
+			apt-get install $i -qq >/dev/null
+		done
+		else
+		echo "Apt-Get update requires root"
 	fi
 fi
 
