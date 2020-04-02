@@ -63,13 +63,26 @@ fi
 
 # Firefox
 if [ "$RUN_FIREFOX" == "yes" ]; then
-	if [ -z "$FIREFOX_DIR" ]; then
-		echo "Firefox requires: FIREFOX_DIR"
+	if [[ $EUID -eq 0 ]]; then
+		echo "Firefox update requires not being root"
 		else
-		if [[ $EUID -eq 0 ]]; then
-			echo "Firefox update requires no root"
+		if [ -z "$FIREFOX_DIR" ]; then
+			echo "FIREFOX_DIR not specified, finding an existing user.js"
+			FIREFOX_DIR="$(find ~/.mozilla/firefox -maxdepth 2 -name user.js | grep -oP '(?<=.mozilla/firefox/)[^/]*' )"
+			if [ -z "$FIREFOX_DIR" ]; then
+				echo "Could not find file, finding a profile to create one"
+				FIREFOX_DIR="$(find ~/.mozilla/firefox -maxdepth 2 -name prefs.js | grep -oP '(?<=.mozilla/firefox/)[^/]*' )"
+			fi
+			FIREFOX_DIRCHECK="$(echo "$FIREFOX_DIR" | wc -l )"
+			if [ ! -z "$FIREFOX_DIR" ] && [ "$FIREFOX_DIRCHECK" = "1" ]; then
+				echo "Updating user.js, changes will take effect on next start. Save in script to optimise - $FIREFOX_DIR"
+				echo "$FIREFOX_PREF" > ~/.mozilla/firefox/$FIREFOX_DIR/user.js
+				else
+				echo "Error finding directory. If any were found they will be listed below, please define one in script"
+				echo "$FIREFOX_DIR"
+			fi
 			else
-			echo "Running Firefox, preferences will take effect on next start"
+			echo "Updating user.js, changes will take effect on next start"
 			echo "$FIREFOX_PREF" > ~/.mozilla/firefox/$FIREFOX_DIR/user.js
 		fi
 	fi
