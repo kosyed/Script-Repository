@@ -3,12 +3,7 @@
 # https://github.com/kosyed/script-repository#post-install-preferences
 # Script for a range of preferences, maybe run as "sudo post-install-preferences.sh && post-install-preferences.sh"
 
-# Reference for Grub: https://www.gnu.org/software/grub/manual/grub/grub.html#Simple-configuration
-RUN_GRUB="no"                                    # "yes" to run
-GRUB_DEFAULT=0
-GRUB_TIMEOUT=1
-
-# Reference for Apt-Get: https://manpages.debian.org/buster/apt/apt-get.8.en.html
+# Reference for Apt-Get: https://wiki.debian.org/Software
 RUN_APTGET="no"                                  # "yes" to run
 APTGET_PREF=(
 filezilla
@@ -25,6 +20,11 @@ transmission
 whois
 )
 
+# Reference for Grub: https://www.gnu.org/software/grub/manual/grub/grub.html#Simple-configuration
+RUN_GRUB="no"                                    # "yes" to run
+GRUB_DEFAULT=0
+GRUB_TIMEOUT=1
+
 # Reference for Firefox: http://kb.mozillazine.org/User.js_file
 RUN_FIREFOX="no"                                 # "yes" to run
 FIREFOX_DIR=""                                   # ~/.mozilla/firefox/[FIREFOX_DIR]/
@@ -36,18 +36,6 @@ user_pref("security.certerrors.permanentOverride", false);
 
 ######## SCRIPT ########
 
-# Grub
-if [ "$RUN_GRUB" == "yes" ]; then
-	if [[ $EUID -eq 0 ]]; then
-		echo "Running Grub"
-		sed -i "s/^GRUB_DEFAULT=.*/GRUB_DEFAULT=$GRUB_DEFAULT/" /etc/default/grub
-		sed -i "s/^GRUB_TIMEOUT=.*/GRUB_TIMEOUT=$GRUB_TIMEOUT/" /etc/default/grub
-		update-grub 2>/dev/null
-		else
-		echo "Grub update requires root"
-	fi
-fi
-
 # Apt-Get
 if [ "$RUN_APTGET" == "yes" ]; then
 	if [[ $EUID -eq 0 ]]; then
@@ -58,6 +46,18 @@ if [ "$RUN_APTGET" == "yes" ]; then
 		done
 		else
 		echo "Apt-Get update requires root"
+	fi
+fi
+
+# Grub
+if [ "$RUN_GRUB" == "yes" ]; then
+	if [[ $EUID -eq 0 ]]; then
+		echo "Running Grub"
+		sed -i "s/^GRUB_DEFAULT=.*/GRUB_DEFAULT=$GRUB_DEFAULT/" /etc/default/grub
+		sed -i "s/^GRUB_TIMEOUT=.*/GRUB_TIMEOUT=$GRUB_TIMEOUT/" /etc/default/grub
+		update-grub 2>/dev/null
+		else
+		echo "Grub update requires root"
 	fi
 fi
 
