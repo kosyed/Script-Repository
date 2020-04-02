@@ -12,9 +12,9 @@ GRUB_TIMEOUT=1
 RUN_FIREFOX="no"                                 # "yes" to run
 FIREFOX_DIR=""                                   # ~/.mozilla/firefox/[FIREFOX_DIR]/
 FIREFOX_PREF="
-'user_pref(\"browser.backspace_action\", 0);'
-'user_pref(\"browser.urlbar.doubleClickSelectsAll\", false);'
-'user_pref(\"security.certerrors.permanentOverride\", false);'
+user_pref(\"browser.backspace_action\", 0);
+user_pref(\"browser.urlbar.doubleClickSelectsAll\", false);
+user_pref(\"security.certerrors.permanentOverride\", false);
 "
 
 ######## SCRIPT ########
