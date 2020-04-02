@@ -14,6 +14,7 @@ FIREFOX_DIR=""                                   # ~/.mozilla/firefox/[FIREFOX_D
 FIREFOX_PREF="
 'user_pref(\"browser.backspace_action\", 0);'
 'user_pref(\"browser.urlbar.doubleClickSelectsAll\", false);'
+'user_pref(\"security.certerrors.permanentOverride\", false);'
 "
 
 ######## SCRIPT ########
