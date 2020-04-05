@@ -51,6 +51,8 @@ if [ ! -f "/opt/mozilla-firefox/firefox" ] || [ "$REINSTALL" == "yes" ]; then
 	mkdir -p /opt/mozilla-firefox
 	mv -v ./firefox/* /opt/mozilla-firefox/
 	rmdir ./firefox
+	chgrp -R users /opt/mozilla-firefox/
+	chmod -R g+w /opt/mozilla-firefox/
 	if [ ! -f "/opt/mozilla-firefox/firefox" ]; then
 		echo "Install Error"
 		exit 1
