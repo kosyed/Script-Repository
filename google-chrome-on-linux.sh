@@ -46,7 +46,7 @@ cd /tmp/google-chrome-install
 if [ ! -f chrome.deb ] || [ "$REDOWNLOAD" == "yes" ]; then
 	echo "Downloading Google Chrome"
 	curl -sSL -o chrome.deb "https://dl.google.com/linux/direct/google-chrome-"$VERSION"_current_amd64.deb"
-	SIZE="$(stat -c '%s' chrome.deb)"
+	SIZE="$(stat -c '%s' chrome.deb 2>/dev/null)"
 	if [ ! -f chrome.deb ] || [ "$SIZE" -lt "1024000" ]; then
 		echo "Download Error"
 		exit 1
