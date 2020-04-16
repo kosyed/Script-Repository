@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-# https://github.com/kosyed/script-repository#firefox-on-linux
+# https://github.com/kosyed/script-repository#mozilla-firefox-on-linux
 # Script installs offical stand-alone version of Mozilla Firefox on linux, works well on Debian based distros
 # Reference: https://wiki.debian.org/Firefox
 # Reference for downloading: https://www.mozilla.org/firefox/all/
@@ -11,8 +11,8 @@ OS="linux64"                                     # "linux" for 32bit
 LANG="en-GB"                                     # "en-US" for American English
 
 # Additional:
-REDOWNLOAD="no"                                  # "yes" to force download if installer exists
-REINSTALL="no"                                   # "yes" to force reinstall
+REINSTALL=""                                     # "yes" to force reinstall
+REDOWNLOAD=""                                    # "yes" to force download if installer exists
 
 ######## SCRIPT ########
 if [ -z "$PRODUCT" ] || [ -z "$OS" ] || [ -z "$LANG" ]; then
@@ -30,13 +30,23 @@ if [[ $EUID -eq 0 ]]; then
 	exit 1	
 fi
 
+if [ "$REINSTALL" == "yes" ]; then
+	:
+	else
+	if [ -f "/usr/bin/mozilla-firefox" ]; then
+		echo "Mozilla Firefox appears to be already installed"
+		exit 0
+	fi
+fi
+
 mkdir -p /tmp/mozilla-firefox-install
 cd /tmp/mozilla-firefox-install
 
 if [ ! -f firefox.tar.bz2 ] || [ "$REDOWNLOAD" == "yes" ]; then
 	echo "Downloading Mozilla Firefox"
 	curl -sSL -o firefox.tar.bz2 "https://download.mozilla.org/?product=$PRODUCT&os=$OS&lang=$LANG"
-	if [ ! -f firefox.tar.bz2 ]; then
+	SIZE="$(stat -c '%s' firefox.tar.bz2 2>/dev/null)"
+	if [ ! -f firefox.tar.bz2 ] || [ "$SIZE" -lt "1024000" ]; then
 		echo "Download Error"
 		exit 1
 	fi
@@ -45,27 +55,23 @@ if [ ! -f firefox.tar.bz2 ] || [ "$REDOWNLOAD" == "yes" ]; then
 	echo "Found Mozilla Firefox installer from $DATE"
 fi
 
-if [ ! -f "/opt/mozilla-firefox/firefox" ] || [ "$REINSTALL" == "yes" ]; then
-	echo "Installing Mozilla Firefox"
-	tar xjf firefox.tar.bz2
-	mkdir -p /opt/mozilla-firefox
-	mv -v ./firefox/* /opt/mozilla-firefox/
-	rmdir ./firefox
-	chgrp -R users /opt/mozilla-firefox/
-	chmod -R g+w /opt/mozilla-firefox/
-	if [ ! -f "/opt/mozilla-firefox/firefox" ]; then
-		echo "Install Error"
-		exit 1
-	fi
-	else
-	echo "Mozilla Firefox appears to be already installed"
+echo "Installing Mozilla Firefox"
+tar xjf firefox.tar.bz2
+mkdir -p /opt/mozilla-firefox
+mv -v ./firefox/* /opt/mozilla-firefox/
+rmdir ./firefox
+chgrp -R users /opt/mozilla-firefox/
+chmod -R g+w /opt/mozilla-firefox/
+if [ ! -f "/opt/mozilla-firefox/firefox" ]; then
+	echo "Install Error"
+	exit 1
 fi
 
 cd /usr/bin
 echo "Linking Mozilla Firefox"
 ln -s /opt/mozilla-firefox/firefox /usr/bin/mozilla-firefox
-cd /usr/share/applications/
 
+cd /usr/share/applications/
 if [ ! -f mozilla-firefox.desktop ]; then
 	echo "Creating Mozilla Firefox Shortcut"
 	SHORTCUT="mozilla-firefox.desktop"
